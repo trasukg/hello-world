@@ -1,0 +1,16 @@
+@Library('jenkins-lib')
+import com.webage.demo.jenkins.SimpleClass;
+
+def lib=new SimpleClass()
+println lib.sayHello("Bob")
+
+node {
+    stage 'Checkout'
+    git 'https://github.com/trasukg/hello-world.git'
+    stage 'Build'
+    sh 'mvn install'
+}
+
+stage 'Approvals'
+input message: 'Please approve the release', 
+ parameters: [booleanParam(defaultValue: false, description: 'This build is ready for release', name: 'goodToGo')]
